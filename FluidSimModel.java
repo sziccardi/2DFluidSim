@@ -48,25 +48,25 @@ public class FluidSimModel {
 			}
 			//check if it hits any walls
 			switch(box.overlaps(p)) {
-			case 1:
-				//StdOut.println("I hit the floor!");
-				p.setVelocity(new Vector(p.getVelocity().getX(), 0.0));
+			case 1: // hit floor
+				p.setVelocity(new Vector(p.getVelocity().getX(), 0.0)); //TODO : FIX THIS
 				p.applyForce(box.getFloorNormal().dot(p.getNetForce().vectorMult(-1)));
 				break;
-			case 2:
+			case 2: // hit ceiling
 				p.setVelocity(new Vector(p.getVelocity().getX(), 0.0));
 				p.applyForce(box.getCeilingNormal().dot(p.getNetForce().vectorMult(-1)));
 				break;
-			case 3: 
+			case 3: // hit left wall
 				p.setVelocity(new Vector(0.0, p.getVelocity().getY()));
 				p.applyForce(box.getLeftWallNormal().dot(p.getNetForce().vectorMult(-1)));
 				break;
-			case 4:
+			case 4: // hit right wall
 				p.setVelocity(new Vector(0.0, p.getVelocity().getY()));
 				p.applyForce(box.getRightWallNormal().dot(p.getNetForce().vectorMult(-1)));
 				break;
 			default:
-				//StdOut.println("not touching a wall!");
+				//not touching any boundary
+				//just gravity is affecting it
 				p.applyForce(new Vector(0.0, -9.8));
 				break;
 			}

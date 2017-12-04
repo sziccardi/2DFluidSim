@@ -1,4 +1,4 @@
-
+   
 public class Box {
 	
 	private double width;
@@ -56,51 +56,97 @@ public class Box {
 	}
 	
 	public int overlaps(Particle p) {
-		
-		double slope;
-		
-		//hit bottom of box
-		slope = Math.tan(angle);
-		Particle temp = new Particle();
-		Vector temp1 = new Vector();
-		temp1.setX((slope*bottomleft.getX() - bottomleft.getY() + 1/slope * p.getPosition().getX() + p.getPosition().getY())/(slope + 1/slope));
-		temp1.setY(slope*(temp1.getX()- bottomleft.getX()) + bottomleft.getY());
-		temp.setPosition(temp1);
-		if(temp.overlaps(p)) {
-			StdOut.println("hit bottom");
-			return 1;
+
+		// horizontal
+		if (angle % (Math.PI) == 0) {
+			//hit bottom
+			if( Math.abs( bottomleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
+				return 1;
+			}
+			//hit top
+			if( Math.abs( topleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
+				return 2;
+			}
+			//hit left
+			if( Math.abs( bottomleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
+				return 3;
+			}
+			//hit right
+			if( Math.abs( bottomright.getX() - p.getPosition().getX() ) < p.getRadius() ) {
+				return 4;
+			}
 		}
-		//hit top of box
-		slope = Math.tan(angle);
-		temp = new Particle();
-		temp1 = new Vector();
-		temp1.setX((slope*topleft.getX() - topleft.getY() + 1/slope * p.getPosition().getX() + p.getPosition().getY())/(slope + 1/slope));
-		temp1.setY(slope*(temp1.getX()- topleft.getX()) + topleft.getY());
-		temp.setPosition(temp1);
-		if(temp.overlaps(p)) {
-			return 2;
+		// vertical
+		else if (angle % (Math.PI / 2) == 0) {
+			//hit bottom
+			if( Math.abs( bottomleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
+				return 1;
+			}
+			//hit top
+			if( Math.abs( topleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
+				return 2;
+			}
+			//hit left
+			if( Math.abs( bottomleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
+				return 3;
+			}
+			//hit right
+			if( Math.abs( bottomright.getY() - p.getPosition().getY() ) < p.getRadius() ) {
+				return 4;
+			}
 		}
-		//hit left of box
-		slope = -1/Math.tan(angle);
-		temp = new Particle();
-		temp1 = new Vector();
-		temp1.setX((slope*topleft.getX() - topleft.getY() + 1/slope * p.getPosition().getX() + p.getPosition().getY())/(slope + 1/slope));
-		temp1.setY(slope*(temp1.getX()- topleft.getX()) + topleft.getY());
-		temp.setPosition(temp1);
-		if(temp.overlaps(p)) {
-			return 3;
+		// for any other angle
+		else {
+			
+			double slope;
+			// hit bottom of box
+			slope = Math.tan(angle);
+			Particle temp = new Particle();
+			Vector temp1 = new Vector();
+			temp1.setX((slope * bottomleft.getX() - bottomleft.getY() + 1 / slope * p.getPosition().getX()
+					+ p.getPosition().getY()) / (slope + 1 / slope));
+			temp1.setY(slope * (temp1.getX() - bottomleft.getX()) + bottomleft.getY());
+			temp.setPosition(temp1);
+			StdOut.println(temp.distanceTo(p) + "");
+			if (temp.distanceTo(p) < p.getRadius()) {
+				StdOut.println("hit bottom");
+				return 1;
+			}
+			// hit top of box
+			slope = Math.tan(angle);
+			temp = new Particle();
+			temp1 = new Vector();
+			temp1.setX((slope * topleft.getX() - topleft.getY() + 1 / slope * p.getPosition().getX()
+					+ p.getPosition().getY()) / (slope + 1 / slope));
+			temp1.setY(slope * (temp1.getX() - topleft.getX()) + topleft.getY());
+			temp.setPosition(temp1);
+			if (temp.distanceTo(p) < p.getRadius()) {
+				return 2;
+			}
+			// hit left of box
+			slope = -1 / Math.tan(angle);
+			temp = new Particle();
+			temp1 = new Vector();
+			temp1.setX((slope * topleft.getX() - topleft.getY() + 1 / slope * p.getPosition().getX()
+					+ p.getPosition().getY()) / (slope + 1 / slope));
+			temp1.setY(slope * (temp1.getX() - topleft.getX()) + topleft.getY());
+			temp.setPosition(temp1);
+			if (temp.distanceTo(p) < p.getRadius()) {
+				return 3;
+			}
+			// hit right of box
+			slope = -1 / Math.tan(angle);
+			temp = new Particle();
+			temp1 = new Vector();
+			temp1.setX((slope * topright.getX() - topright.getY() + 1 / slope * p.getPosition().getX()
+					+ p.getPosition().getY()) / (slope + 1 / slope));
+			temp1.setY(slope * (temp1.getX() - topright.getX()) + topright.getY());
+			temp.setPosition(temp1);
+			if (temp.distanceTo(p) < p.getRadius()) {
+				return 4;
+			}
 		}
-		//hit right of box
-		slope = -1/Math.tan(angle);
-		temp = new Particle();
-		temp1 = new Vector();
-		temp1.setX((slope*topright.getX() - topright.getY() + 1/slope * p.getPosition().getX() + p.getPosition().getY())/(slope + 1/slope));
-		temp1.setY(slope*(temp1.getX()- topright.getX()) + topright.getY());
-		temp.setPosition(temp1);
-		if(temp.overlaps(p)) {
-			return 4;
-		}
-		
+
 		return 0;
 	}
 	
