@@ -53,7 +53,7 @@ public class Vector {
 		
 	}
 	
-	public Vector Mult(double scale) {
+	public Vector vectorMult(double scale) {
 		
 		Vector temp = new Vector();
 			
@@ -64,14 +64,50 @@ public class Vector {
 		
 	}
 	
+	public Vector matrixMult(double[][] a) {
+		double total;
+		double [] temp = new double [3];
+		for (int i = 0; i < 3; i++) {
+				total = 0; 
+				for (int k = 0; k < 3; k++) {
+					switch (k) {
+					case 0: 
+						total += a[i][k] * X;
+						break;
+					case 1:
+						total += a[i][k] * Y;
+						break;
+					case 2:
+						total += a[i][k];
+						break;
+					default: 
+						break;
+					}
+			temp [i] = total;		
+				}
+			}
+		Vector res = new Vector (temp[0]/temp[2], temp[1]/temp[2]);
+		return res;
+		}
+	
+	public Vector dot(Vector a) {
+		return vectorMult(X*a.getX() + Y*a.getY());
+		
+	}
+	
 	public void normalize() {
 		
 		Vector temp = new Vector();
-		temp = Mult(1/getLength());
+		temp = vectorMult(1/getLength());
 		
 		setX(temp.getX());
 		setY(temp.getY());
 		
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + X + ", " + Y + "]";
 	}
 
 }

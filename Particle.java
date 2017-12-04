@@ -1,42 +1,48 @@
 
 public class Particle {
 	
+	private double radius;
+	
 	private Vector position;
 	private double mass;
 	private Vector velocity;
 	
+	private Vector netForce;
+	
+	/** Important Equations to note : 
+	 * Force = mass * acceleration
+	 * change in velocity = acceleration * time elapsed
+	 * momentum = mass * velocity
+	 */
+	
+	/** CONSTRUCTORS */
 	public Particle() {
 		position = new Vector(0.0, 0.0);
-		
 		mass = 1.0;
-		
 		velocity = new Vector(0.0, 0.0);
+		radius = 1.0;
+		netForce = new Vector(0.0, 0.0);
 	}
 	
-	public Particle(Vector position, double mass, Vector velocity) {
+	public Particle(Vector position, double mass, Vector velocity, double radius) {
 		this.position = new Vector(position);
-		
 		this.mass = mass;
-		
 		this.velocity = new Vector(velocity);
+		this.radius = radius;
+		netForce = new Vector(0.0, 0.0);
 	}
 	
+	/** GETTERS & SETTERS */	
 	public void setPosition(Vector position) {
-		
 		this.position = position;
-		
 	}
 	
 	public void setMass(double mass) {
-			
 			this.mass = mass;
-			
 		}
 	
 	public void setVelocity(Vector velocity) {
-		
 		this.velocity = velocity;
-		
 	}
 	
 	public Vector getPosition() {
@@ -51,23 +57,52 @@ public class Particle {
 		return velocity;
 	}
 	
+	public double getRadius() {
+		return radius;
+	}
+	
 	public Vector getMomentem() {
-		
 		Vector temp = new Vector();
-		
-		temp = temp.Mult(mass);
-		
+		temp = velocity.vectorMult(mass);
 		return temp;
+	}
+	
+	/** OPERATIONS */
+
+	public void applyForce(Vector force) {
+		
+		netForce = netForce.add(force);
 		
 	}
 	
-	public void applyForce(Vector force, double time) {
+	public double distanceTo(Particle other) {
+		return Math.sqrt(Math.pow(position.getX()-other.getPosition().getX(),2)+Math.pow(position.getY()-other.getPosition().getY(),2));
+	}
+	
+	public boolean overlaps(Particle other) {
+		
+		if(distanceTo(other) < radius+other.getRadius()) {
+			return true;
+		} else {
+			return false; 
+		}
+	}
+
+	public void move(double dt) {
+		
 		
 		Vector acceleration = new Vector();
-		acceleration = force.Mult(1/mass);
+		acceleration = netForce.add(new Vector(0.0, -9.8)).vectorMult(1/mass);
 		
-		velocity = velocity.add(acceleration.Mult(time));
+		velocity = velocity.add(acceleration.vectorMult(dt));
 		
+		position.setX(position.getX() + velocity.getX()*dt);
+		position.setY(position.getY() + velocity.getY()*dt);
+		
+	}
+
+	public Vector getNetForce() {
+		return netForce;
 	}
 
 }
