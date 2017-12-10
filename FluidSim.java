@@ -28,7 +28,8 @@ public class FluidSim {
 		StdDraw.enableDoubleBuffering();
 		model = new FluidSimModel(400, 200);
 		//TODO : some way to add particles from user
-		model.addParticle(new Vector(300,300), 1.0, new Vector(), 10.0);
+		model.addParticle(new Vector(300,300), 10, new Vector(), 10.0);
+		model.addParticle(new Vector(200, 300), 10, new Vector(), 10.0);
 		
 		while (true) {
 			model.advance();

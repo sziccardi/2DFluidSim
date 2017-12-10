@@ -21,6 +21,7 @@ public class Particle {
 		mass = 1.0;
 		velocity = new Vector(0.0, 0.0);
 		radius = 1.0;
+		//TODO : look at this
 		netForce = new Vector(0.0, 0.0);
 	}
 	
@@ -90,19 +91,42 @@ public class Particle {
 
 	public void move(double dt) {
 		
+		netForce = netForce.add(new Vector(0.0, -9.8));
 		
 		Vector acceleration = new Vector();
-		acceleration = netForce.add(new Vector(0.0, -9.8)).vectorMult(1/mass);
+		//StdOut.println("my net force is " + netForce.toString()); //Gives us the correct net force?
+		acceleration = netForce.vectorMult(1/mass);
+		//StdOut.println("my acceleration is " + acceleration.toString());
 		
 		velocity = velocity.add(acceleration.vectorMult(dt));
+		
+		//StdOut.println("my velocity is " + velocity.toString());
 		
 		position.setX(position.getX() + velocity.getX()*dt);
 		position.setY(position.getY() + velocity.getY()*dt);
 		
 	}
+	
 
 	public Vector getNetForce() {
 		return netForce;
+	}
+
+	public void setNetForce(Vector vector) {
+		netForce = vector;
+		
+	}
+
+	public void rotate(double angle) {
+		double[][] rotationMatrix = { { Math.cos( angle), -Math.sin( angle), 0 },
+				{ Math.sin( angle), Math.cos( angle), 0 }, { 0, 0, 1 } };
+	
+		Vector originalPoint = position.add(new Vector(-300, -300));
+		Vector transformedPoint = originalPoint.matrixMult(rotationMatrix);
+		transformedPoint.setX(300 + transformedPoint.getX());
+		transformedPoint.setY(300 + transformedPoint.getY());
+		position = transformedPoint;
+		
 	}
 
 }

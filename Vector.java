@@ -90,9 +90,17 @@ public class Vector {
 		return res;
 		}
 	
-	public Vector dot(Vector a) {
-		return vectorMult(X*a.getX() + Y*a.getY());
+	public double dot(Vector a) {
+		return X*a.getX() + Y*a.getY();
 		
+	}
+	/**
+	 * returns vector thats perpendicular
+	 * @return
+	 */
+	public Vector perp() {
+		
+		return new Vector(-Y, X);
 	}
 	
 	public void normalize() {
@@ -108,6 +116,12 @@ public class Vector {
 	@Override
 	public String toString() {
 		return "[" + X + ", " + Y + "]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		return ( ((Vector) obj).X == X && ((Vector) obj).Y == Y );
 	}
 
 }

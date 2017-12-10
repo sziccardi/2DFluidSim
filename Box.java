@@ -1,4 +1,5 @@
-   
+import java.util.ArrayList;
+
 public class Box {
 	
 	private double width;
@@ -55,44 +56,52 @@ public class Box {
 		 setTopLeft(transformedPoint);
 	}
 	
-	public int overlaps(Particle p) {
-
+	/**
+	 * returns the normal vector of all the walls acting on particle p
+	 * @param p
+	 * @return
+	 */
+	
+	public ArrayList<Vector> overlaps(Particle p) {
+		
+		ArrayList<Vector> normalForces = new ArrayList<Vector>(0);
+		
 		// horizontal
 		if (angle % (Math.PI) == 0) {
 			//hit bottom
 			if( Math.abs( bottomleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
-				return 1;
+				normalForces.add(getFloorNormal());
 			}
 			//hit top
 			if( Math.abs( topleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
-				return 2;
+				normalForces.add(getCeilingNormal());
 			}
 			//hit left
 			if( Math.abs( bottomleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
-				return 3;
+				normalForces.add(getLeftWallNormal());
 			}
 			//hit right
 			if( Math.abs( bottomright.getX() - p.getPosition().getX() ) < p.getRadius() ) {
-				return 4;
+				normalForces.add(getRightWallNormal());
 			}
 		}
 		// vertical
 		else if (angle % (Math.PI / 2) == 0) {
 			//hit bottom
 			if( Math.abs( bottomleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
-				return 1;
+				normalForces.add(getFloorNormal());
 			}
 			//hit top
 			if( Math.abs( topleft.getX() - p.getPosition().getX() ) < p.getRadius() ) {
-				return 2;
+				normalForces.add(getCeilingNormal());
 			}
 			//hit left
 			if( Math.abs( bottomleft.getY() - p.getPosition().getY() ) < p.getRadius() ) {
-				return 3;
+				normalForces.add(getLeftWallNormal());
 			}
 			//hit right
 			if( Math.abs( bottomright.getY() - p.getPosition().getY() ) < p.getRadius() ) {
-				return 4;
+				normalForces.add(getRightWallNormal());
 			}
 		}
 		// for any other angle
@@ -107,10 +116,8 @@ public class Box {
 					+ p.getPosition().getY()) / (slope + 1 / slope));
 			temp1.setY(slope * (temp1.getX() - bottomleft.getX()) + bottomleft.getY());
 			temp.setPosition(temp1);
-			StdOut.println(temp.distanceTo(p) + "");
 			if (temp.distanceTo(p) < p.getRadius()) {
-				StdOut.println("hit bottom");
-				return 1;
+				normalForces.add(getFloorNormal());
 			}
 			// hit top of box
 			slope = Math.tan(angle);
@@ -121,7 +128,7 @@ public class Box {
 			temp1.setY(slope * (temp1.getX() - topleft.getX()) + topleft.getY());
 			temp.setPosition(temp1);
 			if (temp.distanceTo(p) < p.getRadius()) {
-				return 2;
+				normalForces.add(getCeilingNormal());
 			}
 			// hit left of box
 			slope = -1 / Math.tan(angle);
@@ -132,7 +139,7 @@ public class Box {
 			temp1.setY(slope * (temp1.getX() - topleft.getX()) + topleft.getY());
 			temp.setPosition(temp1);
 			if (temp.distanceTo(p) < p.getRadius()) {
-				return 3;
+				normalForces.add(getLeftWallNormal());
 			}
 			// hit right of box
 			slope = -1 / Math.tan(angle);
@@ -143,11 +150,13 @@ public class Box {
 			temp1.setY(slope * (temp1.getX() - topright.getX()) + topright.getY());
 			temp.setPosition(temp1);
 			if (temp.distanceTo(p) < p.getRadius()) {
-				return 4;
+				normalForces.add(getRightWallNormal());
 			}
 		}
-
-		return 0;
+		
+		
+		//StdOut.println("I have " + normalForces.size() + " normals");
+		return normalForces;
 	}
 	
 		
@@ -156,46 +165,40 @@ public class Box {
 	
 	/**
 	 * returns the direction (unit vector) of the normal force from the floor
-	 * needs to be scaled before use
 	 * @return
 	 */
 	public Vector getFloorNormal() {
-		Vector normal = new Vector(Math.sin(angle), Math.cos(angle));
+		Vector normal = new Vector(bottomright.getY() - bottomleft.getY(), bottomleft.getX() - bottomright.getX());
 		normal.normalize();
-		return normal;
+		return normal.vectorMult(-1);
 	}
 	
 	/**
 	 * returns the direction (unit vector) of the normal force from the left wall
-	 * needs to be scaled before use
 	 * @return
 	 */
 	public Vector getLeftWallNormal() {
-		Vector normal = new Vector(Math.cos(angle), Math.sin(angle));
-		normal = normal.vectorMult(-1);
+		Vector normal = new Vector(topleft.getY() - bottomleft.getY(), bottomleft.getX() - topleft.getX());
 		normal.normalize();
 		return normal;
 	}
 	
 	/**
 	 * returns the direction (unit vector) of the normal force from the right wall
-	 * needs to be scaled before use
 	 * @return
 	 */
 	public Vector getRightWallNormal() {
-		Vector normal = new Vector(Math.cos(angle), Math.sin(angle));
+		Vector normal = new Vector(topright.getY() - bottomright.getY(), bottomright.getX() - topright.getX());
 		normal.normalize();
-		return normal;
+		return normal.vectorMult(-1);
 	}
 	
 	/**
 	 * returns the direction (unit vector) of the normal force from the ceiling
-	 * needs to be scaled before use
 	 * @return
 	 */
 	public Vector getCeilingNormal() {
-		Vector normal = new Vector(Math.sin(angle), Math.cos(angle));
-		normal = normal.vectorMult(-1);
+		Vector normal = new Vector(topright.getY() - topleft.getY(), topleft.getX() - topright.getX());
 		normal.normalize();
 		return normal;
 	}
