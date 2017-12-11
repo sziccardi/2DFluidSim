@@ -148,13 +148,39 @@ public class Particle {
 //		applyForce(deltaX.vectorMult(-50/(distanceTo(q)-radius)  )  );
 		
 		//NORMAL FORCE METHOD
+//		Vector deltaPosition = position.add(q.getPosition().vectorMult(-1));
+//		Vector deltaForce = netForce.add(q.getNetForce());
+//		double amount = deltaForce.dot(deltaPosition);
+//		deltaPosition.normalize();
+//		Vector forceInDirection = deltaPosition.vectorMult(amount);
+//		//magnitude of normal force
+//		velocity = velocity.add(new Vector(forceInDirection.getX() * dt / mass, forceInDirection.getY() * dt / mass));
+//	
+		
+		//WALL METHOD
+//		Vector wall = position.add(q.getPosition().vectorMult(-1)).perp();
+//		wall.normalize();
+//		double theta = Math.acos(wall.getLength() / velocity.getLength());
+//		double alpha = Math.acos(wall.getLength() / q.getVelocity().getLength());
+//		double wallAngle = Math.atan(wall.getY() / wall.getX());
+//		Vector tempVelocity = velocity;
+//		velocity = new Vector(Math.cos(wallAngle - theta), Math.sin(wallAngle - theta)).vectorMult(q.getVelocity().getLength());
+//		q.setVelocity (new Vector(Math.cos(wallAngle + alpha), Math.sin(wallAngle + alpha)).vectorMult(tempVelocity.getLength()) );
+//		StdOut.println("set my velocity to " + velocity.toString() + " and " + q.getVelocity().toString());
+	
+	
+		//AVERAGE PARALLEL VELOCITY
 		Vector deltaPosition = position.add(q.getPosition().vectorMult(-1));
-		Vector deltaForce = netForce.add(q.getNetForce().vectorMult(-1));
-		double amount = deltaForce.dot(deltaPosition);
 		deltaPosition.normalize();
-		Vector forceInDirection = deltaPosition.vectorMult(amount);
-		//magnitude of normal force
-		velocity = velocity.add(new Vector(forceInDirection.getX() * dt / mass, forceInDirection.getY() * dt / mass));
+		Vector parallelVelocityP = deltaPosition.vectorMult(velocity.dot(deltaPosition));
+		Vector perpVelocityP = parallelVelocityP.perp();
+		Vector parallelVelocityQ = deltaPosition.vectorMult(q.getVelocity().dot(deltaPosition));
+		Vector perpVelocityQ = parallelVelocityQ.perp();
+		
+		Vector averageParallel = deltaPosition.vectorMult(( parallelVelocityP.getLength() + parallelVelocityQ.getLength() ) /5 );
+		
+		velocity = perpVelocityP.add(averageParallel);
+		q.setVelocity(perpVelocityQ.add(averageParallel.vectorMult(-1)));
 		
 	}
 

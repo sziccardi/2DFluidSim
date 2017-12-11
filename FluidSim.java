@@ -27,16 +27,22 @@ public class FluidSim {
 	public void run() {
 		StdDraw.enableDoubleBuffering();
 		model = new FluidSimModel(400, 200);
-		model.addParticle(new Vector(100,300), 10, new Vector(), 10.0);
-		model.addParticle(new Vector(200,300), 10, new Vector(), 10.0);
-		model.addParticle(new Vector(300,300), 10, new Vector(), 10.0);
-		model.addParticle(new Vector(400,300), 10, new Vector(), 10.0);
-		model.addParticle(new Vector(500,300), 10, new Vector(), 10.0);
 		while (true) {
-//			//key pressed for long periods of time so we add a bunch
-//			if(StdDraw.isKeyPressed('.')) {
-//				model.addParticle(new Vector(StdDraw.mouseX(),StdDraw.mouseY()), 10, new Vector(), 10.0);
-//			}
+
+			if(StdDraw.mousePressed()) {
+				while(StdDraw.mousePressed()) {
+					model.advance();
+					StdDraw.clear(StdDraw.BLACK);
+					StdDraw.setScale(0, 600);
+					StdDraw.setPenColor(StdDraw.WHITE);
+					drawBox(model.getBox());
+					drawParticles(model.getParticles());
+					StdDraw.show();
+				}
+				//TODO: Check to make sure in the box
+				model.addParticle(new Vector(StdDraw.mouseX(),StdDraw.mouseY()), 10, new Vector(), 10.0);
+			}
+			
 			model.advance();
 			StdDraw.clear(StdDraw.BLACK);
 			StdDraw.setScale(0, 600);

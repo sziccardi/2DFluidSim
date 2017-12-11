@@ -7,7 +7,7 @@ public class FluidSimModel {
 
 	private double dt = 0.01;
 
-	private static final Vector g = new Vector(0.0, -9.8);
+	private static final Vector g = new Vector(0.0, -20);
 
 	/** CONSTRUCTORS */
 	public FluidSimModel(double boxWidth, double boxHeight) {
@@ -76,8 +76,8 @@ public class FluidSimModel {
 					parallel.normalize();
 					// angle between the box's edge and gravity
 					double angleBetween = Math.acos(parallel.dot(p.getNetForce().add(g)) / p.getNetForce().add(g).getLength());
-					// apply normal force from the ground //PLAY WITH SCALING
-					p.applyForce(normals.get(0).vectorMult((p.getNetForce().add(g).getLength() * Math.sin(angleBetween))));
+					// apply normal force from the ground //PLAY WITH SCALING!
+					p.applyForce(normals.get(0).vectorMult(100*(p.getNetForce().add(g).getLength() * Math.sin(angleBetween))));
 				}
 				p.move(dt);
 			}
