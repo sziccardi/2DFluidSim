@@ -83,6 +83,7 @@ public class Particle {
 	public boolean overlaps(Particle other) {
 		
 		if(distanceTo(other) < radius+other.getRadius()) {
+			//StdOut.println("I hit a particle!");
 			return true;
 		} else {
 			return false; 
@@ -126,6 +127,34 @@ public class Particle {
 		transformedPoint.setX(300 + transformedPoint.getX());
 		transformedPoint.setY(300 + transformedPoint.getY());
 		position = transformedPoint;
+		
+	}
+/**
+ * repulsive force method :
+ * adapted from 2010 Game Developers Conference presentation
+ * by Jaymin Kessler, Q-Games, Technology Team, jaymin+gdc@q-games.com
+ * normal force method :
+ * adapted from Particle.java from Sedwick and Wayne Algorithms 4th edition website
+ * @param q
+ */
+	//NEED TO FIX
+	public void bounceOff(Particle q, double dt) {
+		//REPULSIVE FORCE METHOD
+//		//direction of one particles center to another
+//		Vector deltaX = new Vector (q.getPosition().getX()-position.getX(), q.getPosition().getY()-position.getY() );
+//		deltaX.normalize();
+//		//apply a repulsive force between particles that is scaled by their distance
+//		if((distanceTo(q)-radius) < 0) {StdOut.println("something baaad"); }
+//		applyForce(deltaX.vectorMult(-50/(distanceTo(q)-radius)  )  );
+		
+		//NORMAL FORCE METHOD
+		Vector deltaPosition = position.add(q.getPosition().vectorMult(-1));
+		Vector deltaForce = netForce.add(q.getNetForce().vectorMult(-1));
+		double amount = deltaForce.dot(deltaPosition);
+		deltaPosition.normalize();
+		Vector forceInDirection = deltaPosition.vectorMult(amount);
+		//magnitude of normal force
+		velocity = velocity.add(new Vector(forceInDirection.getX() * dt / mass, forceInDirection.getY() * dt / mass));
 		
 	}
 
