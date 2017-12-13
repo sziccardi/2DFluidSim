@@ -27,6 +27,22 @@ public class Box {
 		setCorners();
 	}
 	
+	public boolean validParticle(Particle p) {
+		
+		Vector edgePoint = (bottomleft.add(bottomright).vectorMult(0.5));
+		Particle temp = new Particle();
+		temp.setPosition(edgePoint);
+		Particle temp1 = new Particle();
+		temp1.setPosition(new Vector(300, 300));
+		double radius = temp.distanceTo(temp1);
+		
+		if(temp1.distanceTo(p) < radius) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private void setCorners() {
 		double[][] rotationMatrix = { { Math.cos( getAngle()), -Math.sin( getAngle()), 0 },
 				{ Math.sin( getAngle()), Math.cos( getAngle()), 0 }, { 0, 0, 1 } };
@@ -170,7 +186,7 @@ public class Box {
 	public Vector getFloorNormal() {
 		Vector normal = new Vector(bottomright.getY() - bottomleft.getY(), bottomleft.getX() - bottomright.getX());
 		normal.normalize();
-		return normal.vectorMult(-1);
+		return normal;
 	}
 	
 	/**
@@ -180,7 +196,7 @@ public class Box {
 	public Vector getLeftWallNormal() {
 		Vector normal = new Vector(topleft.getY() - bottomleft.getY(), bottomleft.getX() - topleft.getX());
 		normal.normalize();
-		return normal;
+		return normal.vectorMult(-1);
 	}
 	
 	/**
@@ -190,7 +206,7 @@ public class Box {
 	public Vector getRightWallNormal() {
 		Vector normal = new Vector(topright.getY() - bottomright.getY(), bottomright.getX() - topright.getX());
 		normal.normalize();
-		return normal.vectorMult(-1);
+		return normal;
 	}
 	
 	/**
@@ -200,7 +216,7 @@ public class Box {
 	public Vector getCeilingNormal() {
 		Vector normal = new Vector(topright.getY() - topleft.getY(), topleft.getX() - topright.getX());
 		normal.normalize();
-		return normal;
+		return normal.vectorMult(-1);
 	}
 
 	public double getAngle() {

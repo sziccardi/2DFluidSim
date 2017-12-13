@@ -39,8 +39,15 @@ public class FluidSim {
 					drawParticles(model.getParticles());
 					StdDraw.show();
 				}
-				//TODO: Check to make sure in the box
-				model.addParticle(new Vector(StdDraw.mouseX(),StdDraw.mouseY()), 10, new Vector(), 10.0);
+				Vector position = new Vector(StdDraw.mouseX(),StdDraw.mouseY());
+				Particle p = new Particle();
+				p.setPosition(position);
+				if(model.getBox().validParticle(p)) {
+					p.setMass(1.0);
+					p.setVelocity(new Vector());
+					p.setRadius(10.0);
+					model.addParticle(p);
+				}
 			}
 			
 			model.advance();
