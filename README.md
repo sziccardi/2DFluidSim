@@ -1,14 +1,21 @@
 # 2DFluidSim
+
 By Shelby Ziccardi & DJ Sekiya
-Final Project for our Algorithms and Data Structures class, Lewis & Clark College, Fall 2017. 
+
+Final Project for our Algorithms and Data Structures class, 
+
+Lewis & Clark College, 
+
+Fall 2017. 
+
 A two dimensional particle based fluid simulation with interactive components.
 
 ## How to use:
 
-** 1. Run FluidSim.java **
+**1. Run FluidSim.java**
 This may require using a development environment such as Eclipse to compile.
 
-** 2. Interact **
+**2. Interact**
 Click in the box to add particles. You will only be able to add particles near the center of the box. Be careful not to add particles on top of each other.
 Use the '[' and ']' to rotate the box and watch the particles move.
 
